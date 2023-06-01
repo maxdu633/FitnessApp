@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css'; // Fichier CSS pour les styles spécifiques
 
 function FitnessJournal() {
   const [activities, setActivities] = useState([]);
@@ -37,51 +38,55 @@ function FitnessJournal() {
   };
 
   return (
-    <div>
-      <h1>Fitness APP</h1>
+    <div className="fitness-journal-container">
+      <h1>Journal de fitness</h1>
       
-      {/* Afficher les activités enregistrées */}
-      <h2>Activités enregistrées</h2>
-      <ul>
-        {activities.map((activity) => (
-          <li key={activity.id}>{activity.name}</li>
-        ))}
-      </ul>
+      <div className="activities-section">
+        <h2>Activités enregistrées</h2>
+        <ul>
+          {activities.map((activity) => (
+            <li key={activity.id}>{activity.name}</li>
+          ))}
+        </ul>
+      </div>
       
-      {/* Formulaire pour ajouter une nouvelle activité */}
-      <h2>Ajouter une activité</h2>
-      <form onSubmit={addActivity}>
-        <input type="text" placeholder="Nom de l'activité" />
-        <button type="submit">Ajouter</button>
-      </form>
+      <div className="add-activity-section">
+        <h2>Ajouter une activité</h2>
+        <form onSubmit={addActivity}>
+          <input type="text" placeholder="Nom de l'activité" />
+          <button type="submit">Ajouter</button>
+        </form>
+      </div>
       
-      {/* Afficher la progression actuelle */}
-      <h2>Progression</h2>
-      <p>Progression actuelle : {progress}%</p>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={progress}
-        onChange={(e) => updateProgress(e.target.value)}
-      />
+      <div className="progress-section">
+        <h2>Progression</h2>
+        <p>Progression actuelle : {progress}%</p>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={progress}
+          onChange={(e) => updateProgress(e.target.value)}
+        />
+      </div>
       
-      {/* Formulaire pour définir un nouvel objectif */}
-      <h2>Définir un nouvel objectif</h2>
-      <form onSubmit={setGoal}>
-        <input type="text" placeholder="Objectif" />
-        <button type="submit">Définir</button>
-      </form>
+      <div className="set-goal-section">
+        <h2>Définir un nouvel objectif</h2>
+        <form onSubmit={setGoal}>
+          <input type="text" placeholder="Objectif" />
+          <button type="submit">Définir</button>
+        </form>
+      </div>
       
-      {/* Afficher les statistiques */}
-      <h2>Statistiques</h2>
-      <ul>
-        {statistics.map((stat) => (
-          <li key={stat.id}>{stat.name}: {stat.value}</li>
-        ))}
-      </ul>
+      <div className="statistics-section">
+        <h2>Statistiques</h2>
+        <ul>
+          {statistics.map((stat) => (
+            <li key={stat.id}>{stat.name}: {stat.value}</li>
+          ))}
+        </ul>
+      </div>
       
-      {/* Appel à l'API pour récupérer les statistiques */}
       <button onClick={fetchStatistics}>Actualiser les statistiques</button>
     </div>
   );
