@@ -1,0 +1,15 @@
+{
+  "name": "projet",
+  "version": "1.0.0",
+  "description": "FitnessApp",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "5KRO & MaxiMenace",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0"
+  }
+}
