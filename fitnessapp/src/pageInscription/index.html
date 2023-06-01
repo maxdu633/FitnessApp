@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inscription</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <h1 class="title">Inscription</h1>
+  <div class="container">
+    <form id="inscription-form">
+      <label for="pseudo">Pseudo :</label>
+      <input type="text" id="pseudo" required><br>
+
+      <label for="email">Adresse email :</label>
+      <input type="email" id="email" required><br>
+
+      <label for="sexe">Sexe :</label>
+      <select id="sexe">
+        <option value="homme">Homme</option>
+        <option value="femme">Femme</option>
+        <option value="autre">Autre</option>
+      </select><br>
+
+      <label for="age">Âge :</label>
+      <input type="number" id="age" required><br>
+
+      <label for="poids">Poids :</label>
+      <input type="number" id="poids" required><br>
+
+      <label for="taille">Taille :</label>
+      <input type="number" id="taille" required><br>
+
+      <label for="password">Mot de passe :</label>
+      <input type="password" id="password" required><br>
+
+      <label for="confirm-password">Confirmation du mot de passe :</label>
+      <input type="password" id="confirm-password" required><br>
+
+      <input type="submit" value="S'inscrire">
+    </form>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
