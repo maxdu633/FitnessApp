@@ -38,7 +38,7 @@ function FitnessJournal() {
 
   return (
     <div>
-      <h1>Journal de fitness</h1>
+      <h1>Fitness APP</h1>
       
       {/* Afficher les activités enregistrées */}
       <h2>Activités enregistrées</h2>
