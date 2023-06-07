@@ -117,7 +117,7 @@ body {
 h1 {
   font-size: 3em;
   text-align: center;
-  color: #9CA777;
+  color: #fff;
   font-weight: 100;
   text-transform: capitalize;
   letter-spacing: 4px;
@@ -142,7 +142,7 @@ h1 {
 
 input[type="text"], input[type="email"], input[type="password"] {
   font-size: 0.9em;
-  color: 9CA777;
+  color: #fff;
   font-weight: 100;
   width: 94.5%;
   display: block;
