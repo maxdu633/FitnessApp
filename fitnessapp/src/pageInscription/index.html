@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Inscription</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+<title>Creative Colorlib SignUp Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Custom Theme files -->
+<link href="style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<!-- //web font -->
 </head>
 <body>
-  <h1 class="title">Inscription</h1>
-  <div class="container">
-    <form id="inscription-form" action="/utilisateurs" method="POST"></form>>
-      <label for="pseudo">Pseudo :</label>
-      <input type="text" id="pseudo" required><br>
-
-      <label for="email">Adresse email :</label>
-      <input type="email" id="email" required><br>
-
-      <label for="password">Mot de passe :</label>
-      <input type="password" id="password" required><br>
-
-      <label for="confirm-password">Confirmation du mot de passe :</label>
-      <input type="password" id="confirm-password" required><br>
-
-      <input type="submit" value="S'inscrire">
-    </form>
-  </div>
-  <script src="script.js"></script>
+	<!-- main -->
+	<div class="main-w3layouts wrapper">
+		<h1>INSCRIPTION</h1>
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				<form action="#" method="post">
+					<input class="text" type="text" name="Username" placeholder="Username" required="">
+					<input class="text email" type="email" name="email" placeholder="Email" required="">
+					<input class="text" type="password" name="password" placeholder="Password" required="">
+					<input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="">
+					<div class="wthree-text">
+						<div class="clear"> </div>
+					</div>
+					<input type="submit" value="SIGNUP">
+				</form>
+				<p>Don't have an Account? <a href="#"> Login Now!</a></p>
+			</div>
+		</div>
+	</div>
+	<!-- //main -->
 </body>
 </html>
