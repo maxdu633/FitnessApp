@@ -6,15 +6,14 @@ document.getElementById("inscription-form").addEventListener("submit", function(
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     var confirmPassword = document.getElementById("confirm-password").value;
-  
-    // Effectuer la validation des données ici
-  
-    // Afficher les valeurs dans la console à des fins de démonstration
-    console.log("Pseudo:", pseudo);
-    console.log("Adresse email:", email);
-    console.log("Mot de passe:", password);
-    console.log("Confirmation du mot de passe:", confirmPassword);
+
+    if (password !== confirmPassword) {
+      // Les mots de passe ne correspondent pas
+      alert("Le mot de passe de confirmation ne correspond pas au mot de passe saisi. Veuillez réessayer.");
+      return; // Arrêter l'exécution de la fonction
+  }
   
     // Réinitialiser les champs du formulaire
     document.getElementById("inscription-form").reset();
   });
+
