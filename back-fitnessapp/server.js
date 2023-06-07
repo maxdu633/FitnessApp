@@ -7,14 +7,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connexion à la base de données MongoDB
-mongoose.connect('mongodb://localhost:27017/votre_base_de_donnees', { useNewUrlParser: true, useUnifiedTopology: true })
+// Configuration de la connexion à MongoDB avec Mongoose
+const uri = 'mongodb+srv://balnye2204087:s4mopblMAAWt5HG7@fitnessapp.tt2jusi.mongodb.net/fitnessApp?retryWrites=true&w=majority';
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connecté à la base de données MongoDB');
+
+    // Votre code ici
   })
-  .catch((err) => {
-    console.error('Erreur de connexion à la base de données :', err);
-    process.exit(1);
+  .catch((error) => {
+    console.error('Erreur de connexion à MongoDB :', error);
   });
 
 // Schéma et modèle pour la collection Utilisateur
@@ -40,6 +42,7 @@ const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
 // Routes pour la collection Utilisateur
 app.post('/utilisateurs', (req, res) => {
   const utilisateur = new Utilisateur(req.body);
+  console.log('New User ! ');
   utilisateur.save()
     .then((result) => {
       res.status(201).json(result);
@@ -51,6 +54,7 @@ app.post('/utilisateurs', (req, res) => {
 
 app.get('/utilisateurs/:id', (req, res) => {
   const id = req.params.id;
+  console.log('GET USER');
   Utilisateur.findById(id)
     .then((utilisateur) => {
       if (utilisateur) {
@@ -66,6 +70,7 @@ app.get('/utilisateurs/:id', (req, res) => {
 
 app.delete('/utilisateurs/:id', (req, res) => {
   const id = req.params.id;
+  console.log('DELETE USER');
   Utilisateur.findByIdAndDelete(id)
     .then((utilisateur) => {
       if (utilisateur) {
@@ -82,6 +87,7 @@ app.delete('/utilisateurs/:id', (req, res) => {
 app.put('/utilisateurs/:id', (req, res) => {
   const id = req.params.id;
   const utilisateur = req.body;
+  console.log('PUT USER');
   Utilisateur.findByIdAndUpdate(id, utilisateur, { new: true })
     .then((updatedUtilisateur) => {
       if (updatedUtilisateur) {
@@ -127,6 +133,7 @@ const Activite = mongoose.model('Activite', activiteSchema);
 app.post('/activites/:UserID', (req, res) => {
   const UserID = req.params.UserID;
   const activite = new Activite(req.body);
+  console.log('POST ACT');
   activite.save()
     .then((result) => {
       res.status(201).json(result);
@@ -139,6 +146,7 @@ app.post('/activites/:UserID', (req, res) => {
 app.get('/activites/:UserID/:id', (req, res) => {
   const UserID = req.params.UserID;
   const id = req.params.id;
+  console.log('GET ACT');
   Activite.findOne({ UserID: UserID, id: id })
     .then((activite) => {
       if (activite) {
@@ -155,6 +163,7 @@ app.get('/activites/:UserID/:id', (req, res) => {
 app.delete('/activites/:UserID/:id', (req, res) => {
   const UserID = req.params.UserID;
   const id = req.params.id;
+  console.log('DELETE ACT');
   Activite.findOneAndDelete({ UserID: UserID, id: id })
     .then((activite) => {
       if (activite) {
@@ -172,6 +181,7 @@ app.put('/activites/:UserID/:id', (req, res) => {
   const UserID = req.params.UserID;
   const id = req.params.id;
   const activite = req.body;
+  console.log('PUT ACT');
   Activite.findOneAndUpdate({ UserID: UserID, id: id }, activite, { new: true })
     .then((updatedActivite) => {
       if (updatedActivite) {
@@ -187,6 +197,7 @@ app.put('/activites/:UserID/:id', (req, res) => {
 
 app.get('/activites/:UserID', (req, res) => {
   const UserID = req.query.UserID;
+  console.log('GET ALL ACT');
 
   const query = {};
 
@@ -225,6 +236,7 @@ const Objectif = mongoose.model('Objectif', objectifSchema);
 app.post('/objectifs/:UserID', (req, res) => {
   const UserID = req.params.UserID;
   const objectif = new Objectif(req.body);
+  console.log('NEW OBJ');
   objectif.save()
     .then((result) => {
       res.status(201).json(result);
@@ -237,6 +249,7 @@ app.post('/objectifs/:UserID', (req, res) => {
 app.get('/objectifs/:UserID/:id', (req, res) => {
   const UserID = req.params.UserID;
   const id = req.params.id;
+  console.log('GET OBJ');
   Objectif.findOne({ UserID: UserID, id: id })
     .then((objectif) => {
       if (objectif) {
@@ -253,6 +266,7 @@ app.get('/objectifs/:UserID/:id', (req, res) => {
 app.delete('/objectifs/:UserID/:id', (req, res) => {
   const UserID = req.params.UserID;
   const id = req.params.id;
+  console.log('DELETE OBJ');
   Objectif.findOneAndDelete({ UserID: UserID, id: id })
     .then((objectif) => {
       if (objectif) {
@@ -270,6 +284,7 @@ app.put('/objectifs/:UserID/:id', (req, res) => {
   const UserID = req.params.UserID;
   const id = req.params.id;
   const objectif = req.body;
+  console.log('PUT OBJ');
   Objectif.findOneAndUpdate({ UserID: UserID, id: id }, objectif, { new: true })
     .then((updatedObjectif) => {
       if (updatedObjectif) {
@@ -285,6 +300,7 @@ app.put('/objectifs/:UserID/:id', (req, res) => {
 
 app.get('/objectifs/:UserID', (req, res) => {
   const UserID = req.query.UserID;
+  console.log('GET ALL OBJ');
 
   const query = {};
 
