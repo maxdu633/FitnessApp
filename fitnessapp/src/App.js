@@ -5,11 +5,11 @@ function FitnessJournal() {
   const [activities, setActivities] = useState([]);
   const [progress, setProgress] = useState(0);
   const [goals, setGoals] = useState([]);
-  const [statistics, setStatistics] = useState([]);
+  //const [statistics, setStatistics] = useState([]);
 
   useEffect(() => {
     fetchActivities();
-    fetchStatistics();
+    //fetchStatistics();
     fetchGoals();
   }, []);
 
@@ -113,12 +113,16 @@ function FitnessJournal() {
       
       <div className="goals-section">
         <h2>Objectifs</h2>
-        <ul>
-          {goals.map((goal) => (
-            <li key={goal._id}>{goal.name}</li>
-          ))}
-        </ul>
-      </div>
+          {goals.length > 0 ? (
+            <ul>
+              {goals.map((goal) => (
+                <li key={goal._id}>{goal.name}</li>
+              ))}
+            </ul>
+          ) : (
+          <p>Aucun objectif défini pour le moment.</p>
+          )}
+        </div>
       
       <div className="set-goal-section">
         <h2>Définir un nouvel objectif</h2>
@@ -128,11 +132,11 @@ function FitnessJournal() {
         </form>
       </div>
       
-      <div className="statistics-section">
+       {/* <div className="statistics-section">
         <h2>Statistiques</h2>
         <p>Nombre d'activités enregistrées : {statistics.numActivities}</p>
         <p>Nombre d'objectifs définis : {statistics.numGoals}</p>
-      </div>
+      </div> */}
     </div>
   );
 }
