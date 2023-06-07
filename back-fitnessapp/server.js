@@ -107,8 +107,18 @@ app.get('/utilisateurs', (req, res) => {
 
 // Schéma et modèle pour la collection Activite
 const activiteSchema = new mongoose.Schema({
-  // Définir la structure des champs de l'activité
-  // Exemple : name: String, description: String, date: Date, ...
+  id: {
+    type: Number,
+    required: true,
+  },
+  text: {
+    type: String,
+    required: true,
+  },
+  userID: {
+    type: Number,
+    required: true,
+  },
 });
 
 const Activite = mongoose.model('Activite', activiteSchema);
@@ -183,8 +193,18 @@ app.get('/activites', (req, res) => {
 
 // Schéma et modèle pour la collection Objectif
 const objectifSchema = new mongoose.Schema({
-  // Définir la structure des champs de l'objectif
-  // Exemple : name: String, description: String, deadline: Date, ...
+  id: {
+    type: Number,
+    required: true,
+  },
+  text: {
+    type: String,
+    required: true,
+  },
+  userID: {
+    type: Number,
+    required: true,
+  },
 });
 
 const Objectif = mongoose.model('Objectif', objectifSchema);
