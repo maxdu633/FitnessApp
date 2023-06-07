@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ObjectID } = require('mongodb');
+const mongoose = require('mongoose');
 const cors = require('cors');
 
 // Créer une instance de l'application Express
@@ -8,206 +8,256 @@ app.use(express.json());
 app.use(cors());
 
 // Connexion à la base de données MongoDB
-const uri = 'mongodb://localhost:27017';
-const client = new MongoClient(uri, { useUnifiedTopology: true });
-
-client.connect((err) => {
-  if (err) {
+mongoose.connect('mongodb://localhost:27017/votre_base_de_donnees', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connecté à la base de données MongoDB');
+  })
+  .catch((err) => {
     console.error('Erreur de connexion à la base de données :', err);
-    return;
+    process.exit(1);
+  });
+
+// Schéma et modèle pour la collection Utilisateur
+const utilisateurSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
   }
-  console.log('Connecté à la base de données MongoDB');
+});
 
-  const db = client.db('votre_base_de_donnees');
+const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
 
-  // Routes pour la collection Utilisateur
-  app.post('/utilisateurs', (req, res) => {
-    const utilisateur = req.body;
-    db.collection('utilisateurs').insertOne(utilisateur, (err, result) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
-      } else {
-        res.status(201).json(result.ops[0]);
-      }
+// Routes pour la collection Utilisateur
+app.post('/utilisateurs', (req, res) => {
+  const utilisateur = new Utilisateur(req.body);
+  utilisateur.save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message });
     });
-  });
+});
 
-  app.get('/utilisateurs/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    db.collection('utilisateurs').findOne({ _id: id }, (err, utilisateur) => {
-      if (err) {
-        res.status(404).json({ message: 'Utilisateur non trouvé' });
-      } else {
+app.get('/utilisateurs/:id', (req, res) => {
+  const id = req.params.id;
+  Utilisateur.findById(id)
+    .then((utilisateur) => {
+      if (utilisateur) {
         res.json(utilisateur);
-      }
-    });
-  });
-
-  app.delete('/utilisateurs/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    db.collection('utilisateurs').deleteOne({ _id: id }, (err) => {
-      if (err) {
+      } else {
         res.status(404).json({ message: 'Utilisateur non trouvé' });
-      } else {
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
+app.delete('/utilisateurs/:id', (req, res) => {
+  const id = req.params.id;
+  Utilisateur.findByIdAndDelete(id)
+    .then((utilisateur) => {
+      if (utilisateur) {
         res.json({ message: 'Utilisateur supprimé' });
-      }
-    });
-  });
-
-  app.put('/utilisateurs/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    const utilisateur = req.body;
-    db.collection('utilisateurs').updateOne({ _id: id }, { $set: utilisateur }, (err) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
       } else {
-        db.collection('utilisateurs').findOne({ _id: id }, (err, updatedUtilisateur) => {
-          if (err) {
-            res.status(404).json({ message: 'Utilisateur non trouvé' });
-          } else {
-            res.json(updatedUtilisateur);
-          }
-        });
+        res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
-  });
+});
 
-  app.get('/utilisateurs', (req, res) => {
-    db.collection('utilisateurs').find().toArray((err, utilisateurs) => {
-      if (err) {
-        res.status(500).json({ message: err.message });
+app.put('/utilisateurs/:id', (req, res) => {
+  const id = req.params.id;
+  const utilisateur = req.body;
+  Utilisateur.findByIdAndUpdate(id, utilisateur, { new: true })
+    .then((updatedUtilisateur) => {
+      if (updatedUtilisateur) {
+        res.json(updatedUtilisateur);
       } else {
-        res.json(utilisateurs);
+        res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message });
     });
-  });
+});
 
-  // Routes pour la collection Activite
-  app.post('/activites', (req, res) => {
-    const activite = req.body;
-    db.collection('activites').insertOne(activite, (err, result) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
-      } else {
-        res.status(201).json(result.ops[0]);
-      }
+app.get('/utilisateurs', (req, res) => {
+  Utilisateur.find()
+    .then((utilisateurs) => {
+      res.json(utilisateurs);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
-  });
+});
 
-  app.get('/activites/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    db.collection('activites').findOne({ _id: id }, (err, activite) => {
-      if (err) {
-        res.status(404).json({ message: 'Activité non trouvée' });
-      } else {
+// Schéma et modèle pour la collection Activite
+const activiteSchema = new mongoose.Schema({
+  // Définir la structure des champs de l'activité
+  // Exemple : name: String, description: String, date: Date, ...
+});
+
+const Activite = mongoose.model('Activite', activiteSchema);
+
+// Routes pour la collection Activite
+app.post('/activites/:id', (req, res) => {
+  const activite = new Activite(req.body);
+  activite.save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message });
+    });
+});
+
+app.get('/activites/:id', (req, res) => {
+  const id = req.params.id;
+  Activite.findById(id)
+    .then((activite) => {
+      if (activite) {
         res.json(activite);
-      }
-    });
-  });
-
-  app.delete('/activites/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    db.collection('activites').deleteOne({ _id: id }, (err) => {
-      if (err) {
+      } else {
         res.status(404).json({ message: 'Activité non trouvée' });
-      } else {
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
+app.delete('/activites/:id', (req, res) => {
+  const id = req.params.id;
+  Activite.findByIdAndDelete(id)
+    .then((activite) => {
+      if (activite) {
         res.json({ message: 'Activité supprimée' });
-      }
-    });
-  });
-
-  app.put('/activites/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    const activite = req.body;
-    db.collection('activites').updateOne({ _id: id }, { $set: activite }, (err) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
       } else {
-        db.collection('activites').findOne({ _id: id }, (err, updatedActivite) => {
-          if (err) {
-            res.status(404).json({ message: 'Activité non trouvée' });
-          } else {
-            res.json(updatedActivite);
-          }
-        });
+        res.status(404).json({ message: 'Activité non trouvée' });
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
-  });
+});
 
-  app.get('/activites', (req, res) => {
-    db.collection('activites').find().toArray((err, activites) => {
-      if (err) {
-        res.status(500).json({ message: err.message });
+app.put('/activites/:id', (req, res) => {
+  const id = req.params.id;
+  const activite = req.body;
+  Activite.findByIdAndUpdate(id, activite, { new: true })
+    .then((updatedActivite) => {
+      if (updatedActivite) {
+        res.json(updatedActivite);
       } else {
-        res.json(activites);
+        res.status(404).json({ message: 'Activité non trouvée' });
       }
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message });
     });
-  });
+});
 
-  // Routes pour la collection Objectif
-  app.post('/objectifs', (req, res) => {
-    const objectif = req.body;
-    db.collection('objectifs').insertOne(objectif, (err, result) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
-      } else {
-        res.status(201).json(result.ops[0]);
-      }
+app.get('/activites', (req, res) => {
+  Activite.find()
+    .then((activites) => {
+      res.json(activites);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
-  });
+});
 
-  app.get('/objectifs/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    db.collection('objectifs').findOne({ _id: id }, (err, objectif) => {
-      if (err) {
-        res.status(404).json({ message: 'Objectif non trouvé' });
-      } else {
+// Schéma et modèle pour la collection Objectif
+const objectifSchema = new mongoose.Schema({
+  // Définir la structure des champs de l'objectif
+  // Exemple : name: String, description: String, deadline: Date, ...
+});
+
+const Objectif = mongoose.model('Objectif', objectifSchema);
+
+// Routes pour la collection Objectif
+app.post('/objectifs/:id', (req, res) => {
+  const objectif = new Objectif(req.body);
+  objectif.save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message });
+    });
+});
+
+app.get('/objectifs/:id', (req, res) => {
+  const id = req.params.id;
+  Objectif.findById(id)
+    .then((objectif) => {
+      if (objectif) {
         res.json(objectif);
-      }
-    });
-  });
-
-  app.delete('/objectifs/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    db.collection('objectifs').deleteOne({ _id: id }, (err) => {
-      if (err) {
+      } else {
         res.status(404).json({ message: 'Objectif non trouvé' });
-      } else {
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
+app.delete('/objectifs/:id', (req, res) => {
+  const id = req.params.id;
+  Objectif.findByIdAndDelete(id)
+    .then((objectif) => {
+      if (objectif) {
         res.json({ message: 'Objectif supprimé' });
-      }
-    });
-  });
-
-  app.put('/objectifs/:id', (req, res) => {
-    const id = new ObjectID(req.params.id);
-    const objectif = req.body;
-    db.collection('objectifs').updateOne({ _id: id }, { $set: objectif }, (err) => {
-      if (err) {
-        res.status(400).json({ message: err.message });
       } else {
-        db.collection('objectifs').findOne({ _id: id }, (err, updatedObjectif) => {
-          if (err) {
-            res.status(404).json({ message: 'Objectif non trouvé' });
-          } else {
-            res.json(updatedObjectif);
-          }
-        });
+        res.status(404).json({ message: 'Objectif non trouvé' });
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
-  });
+});
 
-  app.get('/objectifs', (req, res) => {
-    db.collection('objectifs').find().toArray((err, objectifs) => {
-      if (err) {
-        res.status(500).json({ message: err.message });
+app.put('/objectifs/:id', (req, res) => {
+  const id = req.params.id;
+  const objectif = req.body;
+  Objectif.findByIdAndUpdate(id, objectif, { new: true })
+    .then((updatedObjectif) => {
+      if (updatedObjectif) {
+        res.json(updatedObjectif);
       } else {
-        res.json(objectifs);
+        res.status(404).json({ message: 'Objectif non trouvé' });
       }
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message });
     });
-  });
+});
 
-  // Démarrer le serveur
-  app.listen(3000, () => {
-    console.log('Serveur démarré sur le port 3000');
-  });
+app.get('/objectifs', (req, res) => {
+  Objectif.find()
+    .then((objectifs) => {
+      res.json(objectifs);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
+// Démarrer le serveur
+app.listen(3000, () => {
+  console.log('Serveur démarré sur le port 3000');
 });
