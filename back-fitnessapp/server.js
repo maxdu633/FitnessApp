@@ -124,7 +124,8 @@ const activiteSchema = new mongoose.Schema({
 const Activite = mongoose.model('Activite', activiteSchema);
 
 // Routes pour la collection Activite
-app.post('/activites/:id', (req, res) => {
+app.post('/activites/:UserID', (req, res) => {
+  const UserID = req.params.UserID;
   const activite = new Activite(req.body);
   activite.save()
     .then((result) => {
@@ -135,9 +136,10 @@ app.post('/activites/:id', (req, res) => {
     });
 });
 
-app.get('/activites/:id', (req, res) => {
+app.get('/activites/:UserID/:id', (req, res) => {
+  const UserID = req.params.UserID;
   const id = req.params.id;
-  Activite.findById(id)
+  Activite.findOne({ UserID: UserID, id: id })
     .then((activite) => {
       if (activite) {
         res.json(activite);
@@ -150,9 +152,10 @@ app.get('/activites/:id', (req, res) => {
     });
 });
 
-app.delete('/activites/:id', (req, res) => {
+app.delete('/activites/:UserID/:id', (req, res) => {
+  const UserID = req.params.UserID;
   const id = req.params.id;
-  Activite.findByIdAndDelete(id)
+  Activite.findOneAndDelete({ UserID: UserID, id: id })
     .then((activite) => {
       if (activite) {
         res.json({ message: 'Activité supprimée' });
@@ -165,10 +168,11 @@ app.delete('/activites/:id', (req, res) => {
     });
 });
 
-app.put('/activites/:id', (req, res) => {
+app.put('/activites/:UserID/:id', (req, res) => {
+  const UserID = req.params.UserID;
   const id = req.params.id;
   const activite = req.body;
-  Activite.findByIdAndUpdate(id, activite, { new: true })
+  Activite.findOneAndUpdate({ UserID: UserID, id: id }, activite, { new: true })
     .then((updatedActivite) => {
       if (updatedActivite) {
         res.json(updatedActivite);
@@ -182,7 +186,19 @@ app.put('/activites/:id', (req, res) => {
 });
 
 app.get('/activites', (req, res) => {
-  Activite.find()
+  const UserID = req.query.UserID;
+  const id = req.query.id;
+
+  const query = {};
+
+  if (UserID) {
+    query.UserID = UserID;
+  }
+  if (id) {
+    query.id = id;
+  }
+
+  Activite.find(query)
     .then((activites) => {
       res.json(activites);
     })
@@ -210,7 +226,8 @@ const objectifSchema = new mongoose.Schema({
 const Objectif = mongoose.model('Objectif', objectifSchema);
 
 // Routes pour la collection Objectif
-app.post('/objectifs/:id', (req, res) => {
+app.post('/objectifs/:UserID', (req, res) => {
+  const UserID = req.params.UserID;
   const objectif = new Objectif(req.body);
   objectif.save()
     .then((result) => {
@@ -221,9 +238,10 @@ app.post('/objectifs/:id', (req, res) => {
     });
 });
 
-app.get('/objectifs/:id', (req, res) => {
+app.get('/objectifs/:UserID/:id', (req, res) => {
+  const UserID = req.params.UserID;
   const id = req.params.id;
-  Objectif.findById(id)
+  Objectif.findOne({ UserID: UserID, id: id })
     .then((objectif) => {
       if (objectif) {
         res.json(objectif);
@@ -236,9 +254,10 @@ app.get('/objectifs/:id', (req, res) => {
     });
 });
 
-app.delete('/objectifs/:id', (req, res) => {
+app.delete('/objectifs/:UserID/:id', (req, res) => {
+  const UserID = req.params.UserID;
   const id = req.params.id;
-  Objectif.findByIdAndDelete(id)
+  Objectif.findOneAndDelete({ UserID: UserID, id: id })
     .then((objectif) => {
       if (objectif) {
         res.json({ message: 'Objectif supprimé' });
@@ -251,10 +270,11 @@ app.delete('/objectifs/:id', (req, res) => {
     });
 });
 
-app.put('/objectifs/:id', (req, res) => {
+app.put('/objectifs/:UserID/:id', (req, res) => {
+  const UserID = req.params.UserID;
   const id = req.params.id;
   const objectif = req.body;
-  Objectif.findByIdAndUpdate(id, objectif, { new: true })
+  Objectif.findOneAndUpdate({ UserID: UserID, id: id }, objectif, { new: true })
     .then((updatedObjectif) => {
       if (updatedObjectif) {
         res.json(updatedObjectif);
@@ -268,7 +288,19 @@ app.put('/objectifs/:id', (req, res) => {
 });
 
 app.get('/objectifs', (req, res) => {
-  Objectif.find()
+  const UserID = req.query.UserID;
+  const id = req.query.id;
+
+  const query = {};
+
+  if (UserID) {
+    query.UserID = UserID;
+  }
+  if (id) {
+    query.id = id;
+  }
+
+  Objectif.find(query)
     .then((objectifs) => {
       res.json(objectifs);
     })
