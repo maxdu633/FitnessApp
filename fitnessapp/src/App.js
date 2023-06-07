@@ -36,8 +36,8 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de l\'ajout de l\'activité :', error));
   };
 
-  const updateProgress = (value, userId) => {
-    fetch(`http://localhost:3000/objectifs/${userId}`, {
+  const updateProgress = (value, userId, id) => {
+    fetch(`http://localhost:3000/objectifs/${userId}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -70,19 +70,19 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la définition de l\'objectif:', error));
   };
 
-  const fetchGoals = (userId) => {
-    fetch(`http://localhost:3000/objectifs/${userId}`)
+  const fetchGoals = (userId, id) => {
+    fetch(`http://localhost:3000/objectifs/${userId}/${id}`)
       .then((response) => response.json())
       .then((data) => setGoals(data))
       .catch((error) => console.error('Erreur lors de la récupération des objectifs :', error));
   };
 
-  const fetchStatistics = (userId) => {
-    fetch(`http://localhost:3000/utilisateurs/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setStatistics(data.statistics))
-      .catch((error) => console.error('Erreur lors de la récupération des statistiques:', error));
-  };
+  //const fetchStatistics = (userId) => {
+    //fetch(`http://localhost:3000/utilisateurs/${userId}`)
+      //.then((response) => response.json())
+      //.then((data) => setStatistics(data.statistics))
+      //.catch((error) => console.error('Erreur lors de la récupération des statistiques:', error));
+  //};
 
   return (
     <div className="fitness-journal-container">
