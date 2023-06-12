@@ -43,6 +43,9 @@ const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
 app.post('/utilisateurs', (req, res) => {
   const utilisateur = new Utilisateur(JSON.parse(req.body));
   console.log('New User ! ');
+  console.log('Utilisateur:', utilisateur.username);
+  console.log('Email:', utilisateur.email);
+  console.log('Mot de passe:', utilisateur.password);
   utilisateur.save()
     .then((result) => {
       res.status(201).json(result);

@@ -6,12 +6,20 @@ function FitnessJournal() {
   const [progress, setProgress] = useState(0);
   const [goals, setGoals] = useState([]);
   //const [statistics, setStatistics] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetchActivities();
     //fetchStatistics();
     fetchGoals();
   }, []);
+
+  const fetchUserInfo = (userId) => {
+    fetch(`http://localhost:3000/utilisateurs/${userId}`)
+      .then((response) => response.json())
+      .then((data) => setUser(data))
+      .catch((error) => console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error));
+  };
 
   const fetchActivities = (userId) => {
     fetch(`http://localhost:3000/activites/${userId}`)
@@ -84,9 +92,36 @@ function FitnessJournal() {
       //.catch((error) => console.error('Erreur lors de la récupération des statistiques:', error));
   //};
 
+  const logout = () => {
+    fetch('http://localhost:3000/logout', {
+      method: 'POST'
+    })
+      .then(() => setUser(null))
+      .catch((error) => console.error('Erreur lors de la déconnexion:', error));
+  };
+
+  const login = () => {
+    // Implémentez ici la logique de connexion
+    // par exemple, affichez une fenêtre modale de connexion
+  };
+
   return (
     <div className="fitness-journal-container">
       <h1>Journal de fitness</h1>
+      
+      <div className="user-info">
+        {user ? (
+          <div>
+            <p>Connecté en tant que: {user.username}</p>
+            <button onClick={logout}>Se déconnecter</button>
+          </div>
+        ) : (
+          <div>
+            <p>Non connecté.</p>
+            <button onClick={login}>Se connecter</button>
+          </div>
+        )}
+      </div>
       
       <div className="activities-section">
         <h2>Activités</h2>
