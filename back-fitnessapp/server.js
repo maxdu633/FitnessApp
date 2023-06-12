@@ -105,7 +105,8 @@ app.put('/utilisateurs/:id', (req, res) => {
 });
 
 app.get('/utilisateurs', (req, res) => {
-  Utilisateur.find()
+  const utilisateurs = Utilisateur.find()
+  console.log("GET ALL USERS")
     .then((utilisateurs) => {
       res.json(utilisateurs);
     })
