@@ -32,5 +32,9 @@ function submitForm(event) {
 }
 
 // Écouter l'événement de soumission du formulaire
-var form = document.querySelector('form');
-form.addEventListener('submit', submitForm);
+var form = document.getElementById('connexion-form');
+if (form) {
+  form.addEventListener('submit', submitForm);
+} else {
+  console.error('Erreur: Impossible de trouver l\'élément avec l\'ID "connexion-form".');
+}
