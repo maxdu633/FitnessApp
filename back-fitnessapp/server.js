@@ -41,7 +41,7 @@ const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
 
 // Routes pour la collection Utilisateur
 app.post('/utilisateurs', (req, res) => {
-  const utilisateur = new Utilisateur(req.body);
+  const utilisateur = new Utilisateur(JSON.parse(req.body));
   console.log('New User ! ');
   utilisateur.save()
     .then((result) => {
