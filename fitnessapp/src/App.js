@@ -44,7 +44,7 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de l\'ajout de l\'activité :', error));
   };
 
-  const updateProgress = (value, userId, id) => {
+  const updateProgress = (value, id, userId) => {
     fetch(`http://localhost:3000/objectifs/${userId}/${id}`, {
       method: 'PUT',
       headers: {
@@ -78,7 +78,7 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la définition de l\'objectif:', error));
   };
 
-  const fetchGoals = (userId, id) => {
+  const fetchGoals = (id, userId) => {
     fetch(`http://localhost:3000/objectifs/${userId}/${id}`)
       .then((response) => response.json())
       .then((data) => setGoals(data))
@@ -93,35 +93,14 @@ function FitnessJournal() {
   //};
 
   const logout = () => {
-    fetch('http://localhost:3000/logout', {
-      method: 'POST'
-    })
-      .then(() => setUser(null))
-      .catch((error) => console.error('Erreur lors de la déconnexion:', error));
-  };
-
-  const login = () => {
-    // Implémentez ici la logique de connexion
-    // par exemple, affichez une fenêtre modale de connexion
+    // Suppression du cookie
+    
+    // Autres opérations de déconnexion...
   };
 
   return (
     <div className="fitness-journal-container">
       <h1>Journal de fitness</h1>
-      
-      <div className="user-info">
-        {user ? (
-          <div>
-            <p>Connecté en tant que: {user.username}</p>
-            <button onClick={logout}>Se déconnecter</button>
-          </div>
-        ) : (
-          <div>
-            <p>Non connecté.</p>
-            <button onClick={login}>Se connecter</button>
-          </div>
-        )}
-      </div>
       
       <div className="activities-section">
         <h2>Activités</h2>
