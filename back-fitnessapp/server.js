@@ -19,6 +19,10 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     console.error('Erreur de connexion à MongoDB :', error);
   });
 
+function generateRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 // Schéma et modèle pour la collection Utilisateur
 const utilisateurSchema = new mongoose.Schema({
   username: {
@@ -34,6 +38,10 @@ const utilisateurSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  id:{
+    type: Integer,
+    required: true
   }
 });
 
@@ -41,17 +49,35 @@ const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
 
 // Routes pour la collection Utilisateur
 app.post('/utilisateurs', (req, res) => {
-  const utilisateur = new Utilisateur(JSON.parse(req.body));
+  req.body.id = generateRandomNumber(1, 10000000);
+  const utilisateur = new Utilisateur(req.body);
   console.log('New User ! ');
   console.log('Utilisateur:', utilisateur.username);
   console.log('Email:', utilisateur.email);
   console.log('Mot de passe:', utilisateur.password);
+  console.log("ID : ", utilisateur.id)
   utilisateur.save()
     .then((result) => {
       res.status(201).json(result);
     })
     .catch((err) => {
       res.status(400).json({ message: err.message });
+    });
+});
+
+app.post('/identification', (req, res) => {
+  const { username, email } = req.body;
+  console.log('IDENTIFICATION');
+  Utilisateur.findOne({ username, email })
+    .then((utilisateur) => {
+      if (utilisateur) {
+        res.json(utilisateur);
+      } else {
+        res.status(404).json({ message: 'Utilisateur non trouvé' });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
 });
 
