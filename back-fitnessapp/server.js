@@ -12,8 +12,6 @@ const uri = 'mongodb+srv://balnye2204087:s4mopblMAAWt5HG7@fitnessapp.tt2jusi.mon
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connecté à la base de données MongoDB');
-
-    // Votre code ici
   })
   .catch((error) => {
     console.error('Erreur de connexion à MongoDB :', error);
@@ -66,9 +64,11 @@ app.post('/utilisateurs', (req, res) => {
 });
 
 app.post('/identification', (req, res) => {
-  const { username, email } = req.body;
+  const { username, password } = req.body;
   console.log('IDENTIFICATION');
-  Utilisateur.findOne({ username, email })
+  console.log("username : ", username);
+  console.log("password : ", password);
+  Utilisateur.findOne({ username, password })
     .then((utilisateur) => {
       if (utilisateur) {
         res.json(utilisateur);
