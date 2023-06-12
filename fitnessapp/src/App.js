@@ -99,16 +99,16 @@ function FitnessJournal() {
       
       <div className="add-activity-section">
         <h2>Ajouter une activité</h2>
-        <form onSubmit={addActivity}>
+        <form onSubmit={addActivity} class="activity">
           <input type="text" name="activityName" placeholder="Nom de l'activité" />
-          <button type="submit">Ajouter</button>
+          <button type="submit" class="add-activity-btn">Ajouter</button>
         </form>
       </div>
       
       <div className="progress-section">
         <h2>Progression</h2>
         <p>Votre progression : {progress}%</p>
-        <button onClick={() => updateProgress(progress + 10)}>+10%</button>
+        <button onClick={() => updateProgress(progress + 10)} class="add-progress-btn">+10%</button>
       </div>
       
       <div className="goals-section">
@@ -126,9 +126,9 @@ function FitnessJournal() {
       
       <div className="set-goal-section">
         <h2>Définir un nouvel objectif</h2>
-        <form onSubmit={setGoal}>
+        <form onSubmit={setGoal} class="set-goal-form">
           <input type="text" name="goalName" placeholder="Nom de l'objectif" />
-          <button type="submit">Définir</button>
+          <button type="submit" class="add-goal-btn">Définir</button>
         </form>
       </div>
       
