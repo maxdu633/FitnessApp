@@ -17,7 +17,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     console.error('Erreur de connexion à MongoDB :', error);
   });
 
-function generateRandomNumber(min, max) {
+function generateRandomNumber(min, max) { // fonction pour générer ID
   return Math.floor(Math.random() * (max - min) + min);
 }
 
@@ -48,7 +48,7 @@ const utilisateurSchema = new mongoose.Schema({
 const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
 
 // Routes pour la collection Utilisateur
-app.post('/utilisateurs', (req, res) => {
+app.post('/utilisateurs', (req, res) => { // Route page inscription
   req.body.id = generateRandomNumber(1, 10000000);
   const utilisateur = new Utilisateur(req.body);
   console.log('New User ! ');
@@ -65,7 +65,7 @@ app.post('/utilisateurs', (req, res) => {
     });
 });
 
-app.post('/identification', (req, res) => {
+app.post('/identification', (req, res) => { // Route page connexion
   const { username, password } = req.body;
   console.log('IDENTIFICATION');
   console.log("username : ", username);
@@ -73,7 +73,7 @@ app.post('/identification', (req, res) => {
   Utilisateur.findOne({ username, password })
     .then((utilisateur) => {
       if (utilisateur) {
-        res.json(utilisateur);
+        res.json({id: utilisateur.id}); // on retourne l'ID pour qu'il sois stocké en local
       } else {
         res.status(404).json({ message: 'Utilisateur non trouvé' });
       }

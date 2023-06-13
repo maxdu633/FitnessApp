@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import './App.css';
 
 function FitnessJournal() {
@@ -9,19 +10,18 @@ function FitnessJournal() {
   const [user, setUser] = useState(null);
 
   const UserId = localStorage.getItem('userId'); //UserId stocké dans le localStorage suite à la connexion
+  const history = useHistory(); // Utilitaire de redirection
 
   useEffect(() => {
-    fetchActivities(UserId);
-    //fetchStatistics();
-    fetchGoals(UserId);
-  }, []);
-
-  const fetchUserInfo = (userId) => {
-    fetch(`http://localhost:3000/utilisateurs/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setUser(data))
-      .catch((error) => console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error));
-  };
+    // Vérifier la présence de l'ID utilisateur
+    if (!UserId) {
+      // Rediriger l'utilisateur vers l'URL d'identification
+      history.push('/identification');
+    } else {
+      fetchActivities(UserId);
+      fetchGoals(UserId);
+    }
+  }, [UserId, history]);
 
   const fetchActivities = (userId) => { // Récupération des activités
     fetch(`http://localhost:3000/activites/${userId}`)
@@ -87,13 +87,6 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la récupération des objectifs :', error));
   };
 
-  //const fetchStatistics = (userId) => {
-    //fetch(`http://localhost:3000/utilisateurs/${userId}`)
-      //.then((response) => response.json())
-      //.then((data) => setStatistics(data.statistics))
-      //.catch((error) => console.error('Erreur lors de la récupération des statistiques:', error));
-  //};
-
   return (
     <div className="fitness-journal-container">
       <h1>Journal de fitness</h1>
@@ -141,12 +134,6 @@ function FitnessJournal() {
           <button type="submit" class="add-goal-btn">Définir</button>
         </form>
       </div>
-      
-       {/* <div className="statistics-section">
-        <h2>Statistiques</h2>
-        <p>Nombre d'activités enregistrées : {statistics.numActivities}</p>
-        <p>Nombre d'objectifs définis : {statistics.numGoals}</p>
-      </div> */}
     </div>
   );
 }
