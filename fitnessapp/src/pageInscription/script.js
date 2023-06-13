@@ -31,7 +31,9 @@
     .then(response => response.json())
     .then(data => {
         // Traiter la réponse du serveur
-        console.log(data);
+        console.log("User ID", data.id);
+        const userId = data.id;
+        localStorage.setItem('userId', userId); // Stocker l'ID dans le localStorage
         alert("Inscription réussie !");
     })
     .catch(error => {

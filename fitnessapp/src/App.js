@@ -8,10 +8,12 @@ function FitnessJournal() {
   //const [statistics, setStatistics] = useState([]);
   const [user, setUser] = useState(null);
 
+  const UserId = localStorage.getItem('userId'); //UserId stocké dans le localStorage suite à la connexion
+
   useEffect(() => {
-    fetchActivities();
+    fetchActivities(UserId);
     //fetchStatistics();
-    fetchGoals();
+    fetchGoals(UserId);
   }, []);
 
   const fetchUserInfo = (userId) => {
@@ -21,20 +23,20 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error));
   };
 
-  const fetchActivities = (userId) => {
+  const fetchActivities = (userId) => { // Récupération des activités
     fetch(`http://localhost:3000/activites/${userId}`)
       .then((response) => response.json())
       .then((data) => setActivities(data))
       .catch((error) => console.error('Erreur lors de la récupération des activités :', error));
   };
 
-  const addActivity = (activity, userId) => {
+  const addActivity = (event, userId) => { // ajout d'une activité via POST
     fetch(`http://localhost:3000/activites/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(activity),
+      body: JSON.stringify({ activityName: event.target.activityName.value }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -44,7 +46,7 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de l\'ajout de l\'activité :', error));
   };
 
-  const updateProgress = (value, id, userId) => {
+  const updateProgress = (value, id, userId) => { //update progrès sur un objectif
     fetch(`http://localhost:3000/objectifs/${userId}/${id}`, {
       method: 'PUT',
       headers: {
@@ -57,7 +59,7 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la mise à jour de la progression:', error));
   };
 
-  const setGoal = (event, userId) => {
+  const setGoal = (event, userId) => { //setup objectif
     event.preventDefault();
     const newGoal = {
       name: event.target.elements.goalName.value
@@ -78,8 +80,8 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la définition de l\'objectif:', error));
   };
 
-  const fetchGoals = (id, userId) => {
-    fetch(`http://localhost:3000/objectifs/${userId}/${id}`)
+  const fetchGoals = (userId) => { // Récupération de tout les objectifs
+    fetch(`http://localhost:3000/objectifs/${userId}`)
       .then((response) => response.json())
       .then((data) => setGoals(data))
       .catch((error) => console.error('Erreur lors de la récupération des objectifs :', error));
@@ -91,12 +93,6 @@ function FitnessJournal() {
       //.then((data) => setStatistics(data.statistics))
       //.catch((error) => console.error('Erreur lors de la récupération des statistiques:', error));
   //};
-
-  const logout = () => {
-    // Suppression du cookie
-    
-    // Autres opérations de déconnexion...
-  };
 
   return (
     <div className="fitness-journal-container">
@@ -113,7 +109,7 @@ function FitnessJournal() {
       
       <div className="add-activity-section">
         <h2>Ajouter une activité</h2>
-        <form onSubmit={addActivity} class="activity">
+        <form onSubmit={(event) => addActivity(event, UserId)} class="activity">
           <input type="text" name="activityName" placeholder="Nom de l'activité" />
           <button type="submit" class="add-activity-btn">Ajouter</button>
         </form>
@@ -122,7 +118,7 @@ function FitnessJournal() {
       <div className="progress-section">
         <h2>Progression</h2>
         <p>Votre progression : {progress}%</p>
-        <button onClick={() => updateProgress(progress + 10)} class="add-progress-btn">+10%</button>
+        <button onClick={(event) => updateProgress(event, UserId)} class="add-progress-btn">+10%</button>
       </div>
       
       <div className="goals-section">
@@ -140,7 +136,7 @@ function FitnessJournal() {
       
       <div className="set-goal-section">
         <h2>Définir un nouvel objectif</h2>
-        <form onSubmit={setGoal} class="set-goal-form">
+        <form onSubmit={(event) => setGoal(event, UserId)} class="set-goal-form">
           <input type="text" name="goalName" placeholder="Nom de l'objectif" />
           <button type="submit" class="add-goal-btn">Définir</button>
         </form>

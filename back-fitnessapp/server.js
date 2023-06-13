@@ -58,7 +58,7 @@ app.post('/utilisateurs', (req, res) => {
   console.log("ID : ", utilisateur.id)
   utilisateur.save()
     .then((result) => {
-      res.status(201).json(result);
+      res.status(201).json({id: utilisateur.id}); // on retourne l'ID pour qu'il sois stocké en local
     })
     .catch((err) => {
       res.status(400).json({ message: err.message });
