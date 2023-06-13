@@ -9,25 +9,19 @@ function FitnessJournal() {
   const UserId = localStorage.getItem('userId'); //UserId stocké dans le localStorage suite à la connexion
 
   useEffect(() => {
-    // Vérifier la présence de l'ID utilisateur
-    if (!UserId) {
-      // Rediriger l'utilisateur vers l'URL d'identification
-      window.location.href = "pageInscription/index.html";
-    } else {
       fetchActivities(UserId);
       fetchGoals(UserId);
-    }
   }, [UserId]);
 
-  const fetchActivities = (userId) => { // Récupération des activités
-    fetch(`http://localhost:3000/activites/${userId}`)
+  const fetchActivities = (UserId) => { // Récupération des activités
+    fetch(`http://localhost:3000/activites/${UserId}`)
       .then((response) => response.json())
       .then((data) => setActivities(data))
       .catch((error) => console.error('Erreur lors de la récupération des activités :', error));
   };
 
-  const addActivity = (event, userId) => { // ajout d'une activité via POST
-    fetch(`http://localhost:3000/activites/${userId}`, {
+  const addActivity = (event, UserId) => { // ajout d'une activité via POST
+    fetch(`http://localhost:3000/activites/${UserId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,8 +36,8 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de l\'ajout de l\'activité :', error));
   };
 
-  const updateProgress = (value, id, userId) => { //update progrès sur un objectif
-    fetch(`http://localhost:3000/objectifs/${userId}/${id}`, {
+  const updateProgress = (value, id, UserId) => { //update progrès sur un objectif
+    fetch(`http://localhost:3000/objectifs/${UserId}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -55,13 +49,14 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la mise à jour de la progression:', error));
   };
 
-  const setGoal = (event, userId) => { //setup objectif
+  const setGoal = (event, UserId) => { //setup objectif
+    console.log(UserId);
     event.preventDefault();
     const newGoal = {
       name: event.target.elements.goalName.value
     };
 
-    fetch(`http://localhost:3000/objectifs/${userId}`, {
+    fetch(`http://localhost:3000/objectifs/${UserId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -76,8 +71,8 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la définition de l\'objectif:', error));
   };
 
-  const fetchGoals = (userId) => { // Récupération de tout les objectifs
-    fetch(`http://localhost:3000/objectifs/${userId}`)
+  const fetchGoals = (UserId) => { // Récupération de tout les objectifs
+    fetch(`http://localhost:3000/objectifs/${UserId}`)
       .then((response) => response.json())
       .then((data) => setGoals(data))
       .catch((error) => console.error('Erreur lors de la récupération des objectifs :', error));

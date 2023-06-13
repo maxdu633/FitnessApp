@@ -35,6 +35,7 @@
         const userId = data.id;
         localStorage.setItem('userId', userId); // Stocker l'ID dans le localStorage
         alert("Inscription réussie !");
+        window.location.href = 'http://localhost:3001/';
     })
     .catch(error => {
         // Gérer les erreurs
