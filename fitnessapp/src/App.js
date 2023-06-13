@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import './App.css';
 
 function FitnessJournal() {
   const [activities, setActivities] = useState([]);
   const [progress, setProgress] = useState(0);
   const [goals, setGoals] = useState([]);
-  //const [statistics, setStatistics] = useState([]);
-  const [user, setUser] = useState(null);
 
   const UserId = localStorage.getItem('userId'); //UserId stocké dans le localStorage suite à la connexion
-  const history = useHistory(); // Utilitaire de redirection
 
   useEffect(() => {
     // Vérifier la présence de l'ID utilisateur
     if (!UserId) {
       // Rediriger l'utilisateur vers l'URL d'identification
-      history.push('/identification');
+      window.location.href = "pageInscription/index.html";
     } else {
       fetchActivities(UserId);
       fetchGoals(UserId);
     }
-  }, [UserId, history]);
+  }, [UserId]);
 
   const fetchActivities = (userId) => { // Récupération des activités
     fetch(`http://localhost:3000/activites/${userId}`)
