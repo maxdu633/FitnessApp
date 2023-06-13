@@ -38,8 +38,10 @@ const utilisateurSchema = new mongoose.Schema({
     required: true
   },
   id:{
-    type: Integer,
-    required: true
+    type: Number,
+    required: true,
+    min: 1,
+    max: 10000000
   }
 });
 

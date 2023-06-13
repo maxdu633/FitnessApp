@@ -3,16 +3,16 @@ function submitForm(event) {
   event.preventDefault(); // Empêche le rechargement de la page
 
   // Récupérer les valeurs des champs email et mot de passe
-  var email = document.querySelector('input[name="email"]').value;
+  var username = document.querySelector('input[name="username"]').value;
   var password = document.querySelector('input[name="password"]').value;
 
   // Envoyer les données au serveur
-  fetch('http://localhost:3000/utilisateurs', {
+  fetch('http://localhost:3000/identification', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email: email, password: password })
+    body: JSON.stringify({ username: username, password: password })
   })
   .then(response => response.json())
   .then(data => {
