@@ -46,3 +46,4 @@
     // Réinitialiser les champs du formulaire
     document.getElementById("inscription-form").reset();
   });
+  

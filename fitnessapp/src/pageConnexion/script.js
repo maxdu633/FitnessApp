@@ -16,7 +16,7 @@ function submitForm(event) {
   })
   .then(response => response.json())
   .then(data => {
-    if (data.success) {
+    if (data.id) {
       // Connexion réussie, rediriger vers la page du compte
       window.location.href = 'http://localhost:3001/';
     } else {

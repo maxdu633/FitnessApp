@@ -65,15 +65,22 @@ app.post('/utilisateurs', (req, res) => { // Route page inscription
     });
 });
 
-app.post('/identification', (req, res) => { // Route page connexion
+app.post('/identification', (req, res) => {
   const { username, password } = req.body;
   console.log('IDENTIFICATION');
   console.log("username : ", username);
   console.log("password : ", password);
-  Utilisateur.findOne({ username, password })
+  
+  Utilisateur.findOne({ username }) // Recherche de l'utilisateur par nom d'utilisateur
     .then((utilisateur) => {
       if (utilisateur) {
-        res.json({id: utilisateur.id}); // on retourne l'ID pour qu'il sois stocké en local
+        // Comparaison des mots de passe hashés
+        if (utilisateur.password === password) {
+          console.log("user et mdp OK");
+          res.status(201).json({ success: true, id: utilisateur.id }); // Identification réussie
+        } else {
+          res.status(401).json({ message: 'Mot de passe incorrect' });
+        }
       } else {
         res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
