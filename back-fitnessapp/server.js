@@ -165,7 +165,11 @@ const Activite = mongoose.model('Activite', activiteSchema);
 // Routes pour la collection Activite
 app.post('/activites/:UserID', (req, res) => {
   const UserID = req.params.UserID;
-  const activite = new Activite(req.body);
+  const activite = new Activite({
+    id: generateRandomNumber(1, 10000000), // Générez un nouvel ID aléatoire
+    text: req.body.text, // Utilisez le texte récupéré depuis req.body
+    userID: UserID, // Utilisez le UserID récupéré depuis les paramètres de la requête
+  });
   console.log('POST ACT', UserID);
   activite.save()
     .then((result) => {
@@ -241,6 +245,7 @@ app.get('/activites/:UserID', (req, res) => {
   Activite.find(query)
     .then((activites) => {
       res.json(activites);
+      console.log(activites);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
@@ -268,8 +273,12 @@ const Objectif = mongoose.model('Objectif', objectifSchema);
 // Routes pour la collection Objectif
 app.post('/objectifs/:UserID', (req, res) => {
   const UserID = req.params.UserID;
-  const objectif = new Objectif(req.body);
-  console.log('NEW OBJ', UserID);
+  const objectif = new Objectif({
+    id: generateRandomNumber(1, 10000000), // Générez un nouvel ID aléatoire
+    text: req.body.text, // Utilisez le texte récupéré depuis req.body
+    userID: UserID, // Utilisez le UserID récupéré depuis les paramètres de la requête
+  });
+  console.log('NEW OBJ', UserID, req.body.text);
   objectif.save()
     .then((result) => {
       res.status(201).json(result);

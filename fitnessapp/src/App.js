@@ -17,8 +17,13 @@ function FitnessJournal() {
   const fetchActivities = (UserId) => {
     fetch(`http://localhost:3000/activites/${UserId}`)
       .then((response) => response.json())
-      .then((data) => setActivities(data))
-      .catch((error) => console.error('Erreur lors de la récupération des activités :', error));
+      .then((data) => {
+        alert(data); // Alerter les données
+        setActivities(data);
+      })
+      .catch((error) =>
+        console.error("Erreur lors de la récupération des activités :", error)
+      );
   };
 
   const addActivity = (event, UserId) => { // ajout d'une activité via POST
@@ -54,10 +59,13 @@ function FitnessJournal() {
   const setGoal = (event, UserId) => { //setup objectif
     event.preventDefault();
     event.target.reset();
+    const goalName = event.target.elements.goalName.value;
+
 
     const newGoal = {
       name: event.target.elements.goalName.value
     };
+    alert(goalName);
 
     fetch(`http://localhost:3000/objectifs/${UserId}`, {
       method: 'POST',
@@ -95,7 +103,7 @@ function FitnessJournal() {
 
       <div className="add-activity-section">
         <h2>Ajouter une activité</h2>
-        <form onSubmit={(event) => addActivity(event, localStorage.getItem('userId'))} class="activity">
+        <form onSubmit={(event) => addActivity(event, UserId)} class="activity">
           <input type="text" name="activityName" placeholder="Nom de l'activité" />
           <button type="submit" class="add-activity-btn">Ajouter</button>
         </form>
@@ -104,7 +112,7 @@ function FitnessJournal() {
       <div className="progress-section">
         <h2>Progression</h2>
         <p>Votre progression : {progress}%</p>
-        <button onClick={(event) => updateProgress(event, localStorage.getItem('userId'))} class="add-progress-btn">+10%</button>
+        <button onClick={(event) => updateProgress(event, UserId)} class="add-progress-btn">+10%</button>
       </div>
 
       <div className="goals-section">
@@ -122,7 +130,7 @@ function FitnessJournal() {
 
       <div className="set-goal-section">
         <h2>Définir un nouvel objectif</h2>
-        <form onSubmit={(event) => setGoal(event, localStorage.getItem('userId'))} class="set-goal-form">
+        <form onSubmit={(event) => setGoal(event, UserId)} class="set-goal-form">
           <input type="text" name="goalName" placeholder="Nom de l'objectif" />
           <button type="submit" class="add-goal-btn">Définir</button>
         </form>
