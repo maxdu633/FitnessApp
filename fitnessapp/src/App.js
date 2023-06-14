@@ -10,11 +10,8 @@ function FitnessJournal() {
   const UserId = searchParams.get('UserID');
 
   useEffect(() => {
-    const UserId = localStorage.getItem('userId');
-    if (UserId) {
       fetchActivities(UserId);
       fetchGoals(UserId);
-    }
   }, []);
 
   const fetchActivities = (UserId) => {
@@ -25,6 +22,8 @@ function FitnessJournal() {
   };
 
   const addActivity = (event, UserId) => { // ajout d'une activité via POST
+    event.preventDefault(); // Empêcher le rechargement de la page
+    event.target.reset();
     fetch(`http://localhost:3000/activites/${UserId}`, {
       method: 'POST',
       headers: {
@@ -53,7 +52,6 @@ function FitnessJournal() {
   };
 
   const setGoal = (event, UserId) => { //setup objectif
-    console.log(UserId);
     event.preventDefault();
     event.target.reset();
 
