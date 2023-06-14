@@ -58,7 +58,7 @@ app.post('/utilisateurs', (req, res) => { // Route page inscription
   console.log("ID : ", utilisateur.id)
   utilisateur.save()
     .then((result) => {
-      res.status(201).json({id: utilisateur.id}); // on retourne l'ID pour qu'il sois stocké en local
+      res.status(201).json(result);
     })
     .catch((err) => {
       res.status(400).json({ message: err.message });
@@ -73,7 +73,7 @@ app.post('/identification', (req, res) => { // Route page connexion
   Utilisateur.findOne({ username, password })
     .then((utilisateur) => {
       if (utilisateur) {
-        res.json({id: utilisateur.id}); // on retourne l'ID pour qu'il sois stocké en local
+        res.json();
       } else {
         res.status(404).json({ message: 'Utilisateur non trouvé' });
       }

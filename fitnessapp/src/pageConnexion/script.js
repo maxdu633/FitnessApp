@@ -18,7 +18,7 @@ function submitForm(event) {
   .then(data => {
     if (data.success) {
       // Connexion réussie, rediriger vers la page du compte
-      window.location.href = 'http://localhost:3001/';
+      window.location.href = 'http://localhost:3001/?UserID='+encodeURIComponent(data.id);
     } else {
       // Afficher un message d'erreur
       var errorElement = document.getElementById('error-message');
