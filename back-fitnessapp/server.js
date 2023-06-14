@@ -229,7 +229,7 @@ app.put('/activites/:UserID/:id', (req, res) => {
 });
 
 app.get('/activites/:UserID', (req, res) => {
-  const UserID = req.query.UserID;
+  const UserID = req.params.UserID;
   console.log('GET ALL ACT', UserID);
 
   const query = {};
@@ -332,7 +332,7 @@ app.put('/objectifs/:UserID/:id', (req, res) => {
 });
 
 app.get('/objectifs/:UserID', (req, res) => {
-  const UserID = req.query.UserID;
+  const UserID = req.params.UserID;
   console.log('GET ALL OBJ', UserID);
 
   const query = {};
