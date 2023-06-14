@@ -22,6 +22,7 @@ function FitnessJournal() {
   };
 
   const addActivity = (event, UserId) => { // ajout d'une activité via POST
+    event.preventDefault(); // Empêcher le rechargement de la page
     fetch(`http://localhost:3000/activites/${UserId}`, {
       method: 'POST',
       headers: {
@@ -51,6 +52,7 @@ function FitnessJournal() {
   };
 
   const setGoal = (event, UserId) => { //setup objectif
+    event.preventDefault(); // Empêcher le rechargement de la page
     console.log(UserId);
     event.preventDefault();
     const newGoal = {
