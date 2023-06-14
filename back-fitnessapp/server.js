@@ -65,15 +65,16 @@ app.post('/utilisateurs', (req, res) => { // Route page inscription
     });
 });
 
-app.post('/identification', (req, res) => { // Route page connexion
+app.post('/identification', (req, res) => {
   const { username, password } = req.body;
   console.log('IDENTIFICATION');
   console.log("username : ", username);
   console.log("password : ", password);
-  Utilisateur.findOne({ username, password })
+  
+  Utilisateur.findOne({ username }) // Recherche de l'utilisateur par nom d'utilisateur
     .then((utilisateur) => {
       if (utilisateur) {
-        res.json();
+        res.json({id: utilisateur.id}); // on retourne l'ID pour qu'il sois stocké en local
       } else {
         res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
