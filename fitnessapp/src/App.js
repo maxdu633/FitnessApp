@@ -6,6 +6,8 @@ function FitnessJournal() {
   const [progress, setProgress] = useState(0);
   const [goals, setGoals] = useState([]);
 
+  const UserId = localStorage.getItem('userId'); //UserId stocké dans le localStorage suite à la connexion
+
   useEffect(() => {
     const UserId = localStorage.getItem('userId');
     if (UserId) {
