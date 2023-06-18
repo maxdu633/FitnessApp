@@ -167,10 +167,10 @@ app.post('/activites/:UserID', (req, res) => {
   const UserID = req.params.UserID;
   const activite = new Activite({
     id: generateRandomNumber(1, 10000000), // Générez un nouvel ID aléatoire
-    text: req.body.text, // Utilisez le texte récupéré depuis req.body
+    text: req.body.activityName, // Utilisez le texte récupéré depuis req.body
     userID: UserID, // Utilisez le UserID récupéré depuis les paramètres de la requête
   });
-  console.log('POST ACT', UserID);
+  console.log('POST ACT', UserID, req.body);
   activite.save()
     .then((result) => {
       res.status(201).json(result);
@@ -275,10 +275,10 @@ app.post('/objectifs/:UserID', (req, res) => {
   const UserID = req.params.UserID;
   const objectif = new Objectif({
     id: generateRandomNumber(1, 10000000), // Générez un nouvel ID aléatoire
-    text: req.body.text, // Utilisez le texte récupéré depuis req.body
+    text: req.body.goalName, // Utilisez le texte récupéré depuis req.body
     userID: UserID, // Utilisez le UserID récupéré depuis les paramètres de la requête
   });
-  console.log('NEW OBJ', UserID, req.body.text);
+  console.log('NEW OBJ', UserID, req.body.goalName);
   objectif.save()
     .then((result) => {
       res.status(201).json(result);

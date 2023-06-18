@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function FitnessJournal() {
+  //React hooks
   const [activities, setActivities] = useState([]);
-  const [progress, setProgress] = useState(0);
   const [goals, setGoals] = useState([]);
+  const [goalName, setGoalName] = useState(''); //For GoalName
+  const [activityName, setActivityName] = useState(''); //For ActivityName
 
+  //Get UserID
   const searchParams = new URLSearchParams(window.location.search);
   const UserId = searchParams.get('UserID');
 
+  //FetchActivities & FetchGoals at load
   useEffect(() => {
       fetchActivities(UserId);
       fetchGoals(UserId);
@@ -18,7 +22,6 @@ function FitnessJournal() {
     fetch(`http://localhost:3000/activites/${UserId}`)
       .then((response) => response.json())
       .then((data) => {
-        alert(data); // Alerter les données
         setActivities(data);
       })
       .catch((error) =>
@@ -26,7 +29,7 @@ function FitnessJournal() {
       );
   };
 
-  const addActivity = (event, UserId) => { // ajout d'une activité via POST
+  const addActivity = (event) => { // ajout d'une activité via POST
     event.preventDefault(); // Empêcher le rechargement de la page
     event.target.reset();
     fetch(`http://localhost:3000/activites/${UserId}`, {
@@ -34,7 +37,7 @@ function FitnessJournal() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ activityName: event.target.activityName.value }),
+      body: JSON.stringify({activityName}),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -43,36 +46,16 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de l\'ajout de l\'activité :', error));
   };
 
-  const updateProgress = (value, id, UserId) => {
-    fetch(`http://localhost:3000/objectifs/${UserId}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ progress: value })
-    })
-      .then((response) => response.json())
-      .then((data) => setProgress(data.progress))
-      .catch((error) => console.error('Erreur lors de la mise à jour de la progression:', error));
-  };
-
-  const setGoal = (event, UserId) => { //setup objectif
+  const setGoal = (event) => { //setup objectif
     event.preventDefault();
     event.target.reset();
-    const goalName = event.target.elements.goalName.value;
-
-
-    const newGoal = {
-      name: event.target.elements.goalName.value
-    };
-    alert(goalName);
 
     fetch(`http://localhost:3000/objectifs/${UserId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(newGoal)
+      body: JSON.stringify({goalName})
     })
       .then((response) => response.json())
       .then((data) => {
@@ -81,7 +64,7 @@ function FitnessJournal() {
       .catch((error) => console.error('Erreur lors de la définition de l\'objectif:', error));
   };
 
-  const fetchGoals = (UserId) => {
+  const fetchGoals = () => {
     fetch(`http://localhost:3000/objectifs/${UserId}`)
       .then((response) => response.json())
       .then((data) => setGoals(data))
@@ -103,16 +86,16 @@ function FitnessJournal() {
 
       <div className="add-activity-section">
         <h2>Ajouter une activité</h2>
-        <form onSubmit={(event) => addActivity(event, UserId)} class="activity">
-          <input type="text" name="activityName" placeholder="Nom de l'activité" />
-          <button type="submit" class="add-activity-btn">Ajouter</button>
+        <form onSubmit={addActivity} className="activity">
+          <input 
+            type="text" 
+            name="activityName" 
+            placeholder="Nom de l'activité" 
+            value={activityName}
+            onChange={(e) => setActivityName(e.target.value)}
+          />
+          <button type="submit" className="add-activity-btn">Ajouter</button>
         </form>
-      </div>
-
-      <div className="progress-section">
-        <h2>Progression</h2>
-        <p>Votre progression : {progress}%</p>
-        <button onClick={(event) => updateProgress(event, UserId)} class="add-progress-btn">+10%</button>
       </div>
 
       <div className="goals-section">
@@ -130,9 +113,15 @@ function FitnessJournal() {
 
       <div className="set-goal-section">
         <h2>Définir un nouvel objectif</h2>
-        <form onSubmit={(event) => setGoal(event, UserId)} class="set-goal-form">
-          <input type="text" name="goalName" placeholder="Nom de l'objectif" />
-          <button type="submit" class="add-goal-btn">Définir</button>
+        <form onSubmit={setGoal} className="set-goal-form">
+        <input 
+          type="text" 
+          name="goalName" 
+          placeholder="Nom de l'objectif" 
+          value={goalName} 
+          onChange={(e) => setGoalName(e.target.value)} 
+        />
+          <button type="submit" className="add-goal-btn">Définir</button>
         </form>
       </div>
     </div>
