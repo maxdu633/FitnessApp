@@ -236,13 +236,7 @@ app.get('/activites/:UserID', (req, res) => {
   const UserID = req.params.UserID;
   console.log('GET ALL ACT', UserID);
 
-  const query = {};
-
-  if (UserID) {
-    query.UserID = UserID;
-  }
-
-  Activite.find(query)
+  Activite.find({ userID: UserID })
     .then((activites) => {
       res.json(activites);
       console.log(activites);
@@ -344,15 +338,10 @@ app.get('/objectifs/:UserID', (req, res) => {
   const UserID = req.params.UserID;
   console.log('GET ALL OBJ', UserID);
 
-  const query = {};
-
-  if (UserID) {
-    query.UserID = UserID;
-  }
-
-  Objectif.find(query)
+  Objectif.find({userID : UserID})
     .then((objectifs) => {
       res.json(objectifs);
+      console.log(objectifs);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
