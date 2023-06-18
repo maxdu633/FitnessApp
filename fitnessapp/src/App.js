@@ -18,7 +18,7 @@ function FitnessJournal() {
       fetchGoals(UserId);
   }, []);
 
-  const fetchActivities = (UserId) => {
+  const fetchActivities = () => {
     fetch(`http://localhost:3000/activites/${UserId}`)
       .then((response) => response.json())
       .then((data) => {
@@ -79,8 +79,8 @@ function FitnessJournal() {
         <h2>Activités</h2>
         <ul>
           {activities.map((activity) => (
-            <li key={activity._id}>{activity.name}</li>
-          ))}
+        <li key={activity._id}>{activity.text}</li>
+        ))}
         </ul>
       </div>
 
@@ -90,7 +90,7 @@ function FitnessJournal() {
           <input 
             type="text" 
             name="activityName" 
-            placeholder="Nom de l'activité" 
+            placeholder="Nom de l'activité"
             value={activityName}
             onChange={(e) => setActivityName(e.target.value)}
           />
@@ -99,13 +99,13 @@ function FitnessJournal() {
       </div>
 
       <div className="goals-section">
-        <h2>Objectifs</h2>
+      <h2>Objectifs</h2>
         {goals.length > 0 ? (
-          <ul>
-            {goals.map((goal) => (
-              <li key={goal._id}>{goal.name}</li>
-            ))}
-          </ul>
+        <ul>
+        {goals.map((goal) => (
+          <li key={goal._id}>{goal.text}</li>
+        ))}
+        </ul>
         ) : (
           <p>Aucun objectif défini pour le moment.</p>
         )}
